@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+:root {
+    /* Primary Greens */
+    --laapak-dark-green: #0a6e35;
+    --laapak-medium-green: #0eaf54;
+    --laapak-light-green: #36d278;
+
+    /* Neutral Grays */
+    --laapak-dark-gray: #343a40;
+    --laapak-medium-gray: #6c757d;
+    --laapak-light-gray: #f8f9fa;
+
+    /* System & State Colors */
+    --laapak-success: #28a745;
+    --laapak-danger: #dc3545;
+    --laapak-warning: #ffc107;
+    --laapak-white: #ffffff;
+}
+
+body {
+    background-color: var(--laapak-light-gray);
+    color: var(--laapak-dark-gray);
+    font-family: 'Tajawal', 'Segoe UI', sans-serif;
+}
+
+.header .navbar {
+    background: linear-gradient(90deg, var(--laapak-medium-green), var(--laapak-dark-green));
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header .navbar-brand {
+    color: var(--laapak-dark-green);
+    font-weight: 700;
+    font-size: 1.75rem;
+}
+
+.header .nav-link {
+    color: white;
+    font-size: 1.25rem; /* Larger icons */
+    background-color: transparent;
+    border-radius: 50%; /* Circular shape */
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.header .nav-link.active,
+.header .nav-link:hover {
+    color: var(--laapak-white); /* Keep icon color white */
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.main-content {
+    padding: 2rem;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background-color: var(--laapak-medium-green);
+    border-color: var(--laapak-medium-green);
+    border-radius: 50px; /* Pill shape */
+    padding: 0.5rem 1.5rem;
+    font-weight: 700;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: var(--laapak-dark-green);
+    border-color: var(--laapak-dark-green);
+}
+

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laapak Finance - المستحقات</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../public/css/styles.css">
+</head>
+<body>
+
+    <header id="header-placeholder" class="header"></header>
+
+    <main class="main-content container mt-4">
+        <div class="page-header d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">إدارة المستحقات</h1>
+            <button class="btn btn-primary btn-pill" data-bs-toggle="modal" data-bs-target="#addReceivableModal">
+                <i class="fas fa-plus me-2"></i> إضافة مستحق
+            </button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>اسم العميل</th>
+                                <th>اسم المشروع</th>
+                                <th>المبلغ</th>
+                                <th>تاريخ الاستحقاق</th>
+                                <th>الحالة</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receivables-table-body">
+                            <!-- Data will be loaded here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Receivable Modal -->
+    <div class="modal fade" id="addReceivableModal" tabindex="-1" aria-labelledby="addReceivableModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addReceivableModalLabel">إضافة مستحق جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-receivable-form">
+                        <div class="mb-3">
+                            <label for="client_name" class="form-label">اسم العميل</label>
+                            <input type="text" class="form-control" id="client_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="project_name" class="form-label">اسم المشروع</label>
+                            <input type="text" class="form-control" id="project_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">المبلغ</label>
+                            <input type="number" step="0.01" class="form-control" id="amount" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="due_date" class="form-label">تاريخ الاستحقاق</label>
+                            <input type="date" class="form-control" id="due_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">الحالة</label>
+                            <select class="form-select" id="status" required>
+                                <option value="Due" selected>مستحق</option>
+                                <option value="Paid">مدفوع</option>
+                                <option value="Overdue">متأخر</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer border-0">
+                            <button type="button" class="btn btn-secondary btn-pill" data-bs-dismiss="modal">إغلاق</button>
+                            <button type="submit" class="btn btn-primary btn-pill">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../public/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const receivablesTableBody = document.getElementById('receivables-table-body');
+            const addReceivableForm = document.getElementById('add-receivable-form');
+            const addReceivableModal = new bootstrap.Modal(document.getElementById('addReceivableModal'));
+
+            const formatCurrency = (amount) => {
+                const numericAmount = Number(amount);
+                if (isNaN(numericAmount)) {
+                    return '0.00 EGP';
+                }
+                return new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP' }).format(numericAmount);
+            };
+
+            const formatDate = (dateString) => {
+                if (!dateString) return 'N/A';
+                const date = new Date(dateString);
+                const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+                return new Date(date.getTime() + userTimezoneOffset).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric', calendar: 'gregory' });
+            };
+
+            const getStatusBadge = (status) => {
+                switch (status) {
+                    case 'Paid':
+                        return `<span class="badge bg-success-soft">مدفوع</span>`;
+                    case 'Overdue':
+                        return `<span class="badge bg-danger-soft">متأخر</span>`;
+                    case 'Due':
+                    default:
+                        return `<span class="badge bg-warning-soft">مستحق</span>`;
+                }
+            };
+
+            const fetchReceivables = async () => {
+                try {
+                    const response = await fetch('/api/receivables');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const receivables = await response.json();
+
+                    receivablesTableBody.innerHTML = '';
+                    if (receivables.length === 0) {
+                        receivablesTableBody.innerHTML = '<tr><td colspan="6" class="text-center">لا توجد مستحقات لعرضها.</td></tr>';
+                        return;
+                    }
+
+                    receivables.forEach(receivable => {
+                        const row = `
+                            <tr>
+                                <td>${receivable.client_name}</td>
+                                <td>${receivable.project_name || 'N/A'}</td>
+                                <td>${formatCurrency(receivable.amount)}</td>
+                                <td>${formatDate(receivable.due_date)}</td>
+                                <td>${getStatusBadge(receivable.status)}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                        receivablesTableBody.insertAdjacentHTML('beforeend', row);
+                    });
+                } catch (error) {
+                    console.error('Failed to fetch receivables:', error);
+                    receivablesTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">فشل تحميل البيانات.</td></tr>';
+                }
+            };
+
+            addReceivableForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newReceivable = {
+                    client_name: document.getElementById('client_name').value,
+                    project_name: document.getElementById('project_name').value,
+                    amount: document.getElementById('amount').value,
+                    due_date: document.getElementById('due_date').value,
+                    status: document.getElementById('status').value,
+                };
+
+                try {
+                    const response = await fetch('/api/receivables', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newReceivable)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Server Error');
+                    }
+
+                    addReceivableForm.reset();
+                    addReceivableModal.hide();
+                    fetchReceivables(); // Refresh the table
+
+                } catch (error) {
+                    console.error('Failed to create receivable:', error);
+                    alert(`فشل إنشاء المستحق: ${error.message}`);
+                }
+            });
+
+            // Initial fetch
+            fetchReceivables();
+        });
+    </script>
+</body>
+</html>

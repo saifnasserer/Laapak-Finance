@@ -1,0 +1,28 @@
+{
+  "name": "laapak-finance",
+  "version": "1.0.0",
+  "description": "Financial management system for Laapak.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "db:init": "node scripts/init-db.js",
+    "db:migrate": "node scripts/migrate-expenses.js",
+    "db:migrate-v2": "node scripts/migrate-expenses-v2.js",
+    "db:init-receivables": "node scripts/init-receivables-db.js",
+    "db:migrate-receivables": "node scripts/migrate-receivables.js",
+    "db:migrate-recurring": "node scripts/migrate-expenses-recurring.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+  
+}
