@@ -14,7 +14,7 @@
     "db:migrate-recurring": "node scripts/migrate-expenses-recurring.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Laapak",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",

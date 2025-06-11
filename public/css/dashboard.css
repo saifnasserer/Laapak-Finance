@@ -1,0 +1,183 @@
+/* public/css/dashboard.css */
+
+/* --- Fonts & Root Variables --- */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+:root {
+    --dash-font: 'Tajawal', 'Cairo', sans-serif;
+    --hero-bg-image: url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2511&auto=format&fit=crop');
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-primary-light: #ffffff;
+    --text-secondary-light: #e0e0e0;
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    --card-hover-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
+    --chart-card-bg: #ffffff;
+}
+
+/* --- Main Layout --- */
+body {
+    font-family: var(--dash-font);
+}
+
+.dashboard-main {
+    padding: 0; /* Remove default padding */
+    background-color: var(--laapak-light-gray);
+}
+
+/* --- Section 1: Hero --- */
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 50vh;
+    padding: 4rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: var(--hero-bg-image);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Parallax effect */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Updated gradient: darker + subtle green accent */
+    background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(14,175,84,0.55) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: var(--text-primary-light);
+}
+
+.welcome-header {
+    margin-bottom: 3rem;
+}
+
+#welcome-message {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.25);
+}
+
+#date-time {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--text-secondary-light);
+    opacity: 0.9;
+}
+
+/* --- Dashboard Cards --- */
+.dash-card {
+    background: var(--glass-bg);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-primary-light);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.dash-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-hover-shadow);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.card-icon-wrapper {
+    background-color: rgba(255, 255, 255, 0.15);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.card-icon-wrapper .lucide {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+}
+
+.card-details {
+    text-align: right;
+}
+
+.card-subtitle {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-secondary-light);
+    margin-bottom: 0.25rem;
+}
+
+.card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+/* --- Section 2: Analytics --- */
+.analytics-section {
+    background-color: var(--laapak-light-gray);
+}
+
+.chart-card {
+    background-color: var(--chart-card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-card .chart-container {
+    position: relative;
+    flex-grow: 1; /* Allow container to fill space */
+    min-height: 280px; /* Ensure a minimum height for rendering */
+}
+
+.chart-card h5 {
+    font-weight: 600;
+    color: var(--laapak-dark-gray);
+    margin-bottom: 1rem;
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 992px) {
+    .hero-section {
+        min-height: auto;
+        padding: 3rem 0;
+    }
+    #welcome-message {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dash-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    .card-details {
+        text-align: center;
+    }
+}

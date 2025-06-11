@@ -131,7 +131,8 @@
                 if (!dateString) return 'N/A';
                 const date = new Date(dateString);
                 const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-                return new Date(date.getTime() + userTimezoneOffset).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' });
+                // Using ar-EG for Gregorian calendar in Arabic
+                return new Date(date.getTime() + userTimezoneOffset).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
             };
 
             async function fetchExpenses() {
@@ -157,8 +158,16 @@
                                 <td>${formatDate(expense.expense_date)}</td>
                                 <td class="text-center">${recurringIcon}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-secondary" title="تعديل"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" title="حذف"><i class="fas fa-trash"></i></button>
+                                    <div class="dropdown">
+                                        <button class="btn btn-icon-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v text-secondary"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-start">
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>تعديل</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>حذف</a></li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         `;

@@ -1,195 +1,164 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laapak Finance - لوحة التحكم</title>
+
+    <!-- Core Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Icons: Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Charting -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="../public/css/styles.css">
+    <link rel="stylesheet" href="../public/css/dashboard.css">
+
 </head>
 <body>
 
     <header id="header-placeholder" class="header"></header>
 
-    <main class="main-content container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h2">لوحة التحكم</h1>
-        </div>
+    <main class="dashboard-main">
+        <!-- Section 1: Hero + Dashboard Cards -->
+        <section class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <div class="welcome-header">
+                    <h1 id="welcome-message"></h1>
+                    <p id="date-time"></p>
+                </div>
+                <div class="row g-4 dashboard-cards-container">
+                    <!-- Card 1: Total Revenue -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dash-card">
+                            <div class="card-icon-wrapper"><i data-lucide="wallet"></i></div>
+                            <div class="card-details">
+                                <h6 class="card-subtitle">إجمالي الإيرادات</h6>
+                                <h4 class="card-value" id="total-revenue">0.00 EGP</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2: Total Expenses -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dash-card">
+                            <div class="card-icon-wrapper"><i data-lucide="receipt"></i></div>
+                            <div class="card-details">
+                                <h6 class="card-subtitle">إجمالي المصروفات</h6>
+                                <h4 class="card-value" id="total-expenses">0.00 EGP</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 3: Net Profit -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dash-card">
+                            <div class="card-icon-wrapper"><i data-lucide="trending-up"></i></div>
+                            <div class="card-details">
+                                <h6 class="card-subtitle">صافي الربح</h6>
+                                <h4 class="card-value" id="net-profit">0.00 EGP</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 4: Receivables -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dash-card">
+                            <div class="card-icon-wrapper"><i data-lucide="hand-coins"></i></div>
+                            <div class="card-details">
+                                <h6 class="card-subtitle">المستحقات القادمة</h6>
+                                <h4 class="card-value" id="upcoming-receivables">0.00 EGP</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Summary Cards -->
-        <!-- Summary Cards -->
-        <div class="row g-4">
-            <!-- Total Revenue -->
-            <div class="col-lg-3 col-md-6">
-                <div class="card shadow border-0 h-100 card-hover">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="icon-circle bg-success-soft text-success me-3">
-                            <i class="fas fa-wallet fa-lg"></i>
+        <!-- Section 2: Analytics & Charts -->
+        <section class="analytics-section container py-5">
+            <div class="row g-4">
+                <!-- Chart 1: Monthly Revenue -->
+                <div class="col-lg-7">
+                    <div class="chart-card">
+                        <h5>الإيرادات الشهرية</h5>
+                        <div class="chart-container">
+                            <canvas id="monthlyRevenueChart"></canvas>
                         </div>
-                        <div>
-                            <h6 class="card-subtitle mb-1 text-muted">إجمالي الإيرادات</h6>
-                            <h4 class="card-title fw-bold mb-0" id="total-revenue">...</h4>
+                    </div>
+                </div>
+                <!-- Chart 2: Expense Breakdown -->
+                <div class="col-lg-5">
+                    <div class="chart-card">
+                        <h5>تصنيف المصروفات</h5>
+                        <div class="chart-container">
+                            <canvas id="expenseBreakdownChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chart 3: Project Margins -->
+                <div class="col-lg-4">
+                    <div class="chart-card">
+                        <h5>هوامش ربح المشاريع</h5>
+                        <div class="chart-container">
+                            <canvas id="projectMarginsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chart 4: Receivables Timeline -->
+                <div class="col-lg-4">
+                    <div class="chart-card">
+                        <h5>الجدول الزمني للمستحقات</h5>
+                        <div class="chart-container">
+                            <canvas id="receivablesTimelineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chart 5: Recurring Payments -->
+                <div class="col-lg-4">
+                    <div class="chart-card">
+                        <h5>المدفوعات المتكررة</h5>
+                        <div class="chart-container">
+                            <canvas id="recurringPaymentsChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Total Expenses -->
-            <div class="col-lg-3 col-md-6">
-                <div class="card shadow border-0 h-100 card-hover">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="icon-circle bg-danger-soft text-danger me-3">
-                            <i class="fas fa-file-invoice-dollar fa-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="card-subtitle mb-1 text-muted">إجمالي المصروفات</h6>
-                            <h4 class="card-title fw-bold mb-0" id="total-expenses">...</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Net Profit -->
-            <div class="col-lg-3 col-md-6">
-                <div class="card shadow border-0 h-100 card-hover">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="icon-circle bg-primary-soft text-primary me-3">
-                            <i class="fas fa-chart-line fa-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="card-subtitle mb-1 text-muted">صافي الربح</h6>
-                            <h4 class="card-title fw-bold mb-0" id="net-profit">...</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Upcoming Receivables -->
-            <div class="col-lg-3 col-md-6">
-                <div class="card shadow border-0 h-100 card-hover">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="icon-circle bg-warning-soft text-warning me-3">
-                            <i class="fas fa-hand-holding-usd fa-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="card-subtitle mb-1 text-muted">المستحقات القادمة</h6>
-                            <h4 class="card-title fw-bold mb-0" id="upcoming-receivables">...</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Section -->
-        <div class="row g-4 mt-2">
-            <!-- Revenue vs. Expenses Chart -->
-            <div class="col-lg-8">
-                <div class="card shadow border-0 h-100">
-                    <div class="card-header bg-transparent border-0">
-                        <h5 class="card-title mb-0">الإيرادات مقابل المصروفات (آخر 30 يومًا)</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="revenue-expenses-chart"></div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-
-        <!-- Monthly Profitability Chart -->
-        <div class="row g-4 mt-2">
-            <div class="col-12">
-                <div class="card shadow border-0">
-                     <div class="card-header bg-transparent border-0">
-                        <h5 class="card-title mb-0">الربحية الشهرية (العام الحالي)</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="monthly-profitability-chart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="../public/js/main.js"></script>
+    <script src="../public/js/dashboard.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', async function () {
-            const formatCurrency = (amount) => {
-                const options = {
-                    style: 'currency',
-                    currency: 'EGP'
-                };
-                if (amount % 1 === 0) {
-                    options.minimumFractionDigits = 0;
-                    options.maximumFractionDigits = 0;
-                }
-                return new Intl.NumberFormat('ar-EG', options).format(amount);
-            };
-
-            // Chart options presets
-            const chartOptions = {
-                chart: {
-                    fontFamily: 'Tajawal, sans-serif',
-                    toolbar: { show: false },
-                    zoom: { enabled: false }
-                },
-                colors: ['#0eaf54', '#dc3545', '#007553', '#ffc107'],
-                xaxis: {
-                    labels: { style: { colors: '#6c757d' } }
-                },
-                yaxis: {
-                    labels: {
-                        style: { colors: '#6c757d' },
-                        formatter: (value) => `${value.toLocaleString('ar-EG')} EGP`
-                    }
-                },
-                grid: {
-                    borderColor: '#f1f1f1'
-                },
-                tooltip: {
-                    theme: 'dark'
-                }
-            };
-
-            try {
-                const response = await fetch('/api/dashboard');
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-
-                // 1. Update Key Metrics
-                document.getElementById('total-revenue').textContent = formatCurrency(data.keyMetrics.totalRevenue);
-                document.getElementById('total-expenses').textContent = formatCurrency(data.keyMetrics.totalExpenses);
-                document.getElementById('net-profit').textContent = formatCurrency(data.keyMetrics.netProfit);
-                document.getElementById('upcoming-receivables').textContent = formatCurrency(data.keyMetrics.upcomingReceivables);
-
-                // 2. Render Revenue vs. Expenses Chart
-                const revenueExpensesChartOptions = {
-                    ...chartOptions,
-                    series: [
-                        { name: 'الإيرادات', data: data.dailyFinancials.map(d => d.daily_revenue) },
-                        { name: 'المصروفات', data: data.dailyFinancials.map(d => d.daily_expenses) }
-                    ],
-                    chart: { ...chartOptions.chart, type: 'area', height: 350 },
-                    xaxis: { ...chartOptions.xaxis, type: 'datetime', categories: data.dailyFinancials.map(d => d.day) },
-                    dataLabels: { enabled: false },
-                    stroke: { curve: 'smooth', width: 2 },
-                    legend: { position: 'top' }
-                };
-                new ApexCharts(document.querySelector("#revenue-expenses-chart"), revenueExpensesChartOptions).render();
-                // 4. Render Monthly Profitability Chart
-                console.log('Monthly Profitability Data:', data.monthlyProfitability);
-                const monthlyProfitabilityChartOptions = {
-                    ...chartOptions,
-                    series: [{
-                        name: 'صافي الربح',
-                        data: data.monthlyProfitability.map(m => m.monthly_revenue - m.monthly_expenses)
+        lucide.createIcons(); // Initialize Lucide icons
+    </script>
+                    chart: { ...chartOptions.chart, type: 'bar', height: 400 },
+                    plotOptions: {
+                        bar: {
+                            horizontal: true,
+                            borderRadius: 4
+                        }
+                    },
+                    colors: [function({ value }) {
+                        return value < 0 ? '#dc3545' : '#0eaf54';
                     }],
-                    chart: { ...chartOptions.chart, type: 'bar', height: 350 },
-                    plotOptions: { bar: { horizontal: false, columnWidth: '55%', endingShape: 'rounded' } },
                     dataLabels: { enabled: false },
                     xaxis: {
                         ...chartOptions.xaxis,
                         categories: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                    },
+                    yaxis: {
+                        labels: {
+                            style: { colors: '#6c757d' },
+                            formatter: (value) => `${Math.round(value).toLocaleString('ar-EG')} ج.م`
+                        }
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: (value) => `${Math.round(value).toLocaleString('ar-EG')} ج.م`
+                        }
                     }
                 };
                 new ApexCharts(document.querySelector("#monthly-profitability-chart"), monthlyProfitabilityChartOptions).render();
